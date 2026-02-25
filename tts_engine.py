@@ -19,7 +19,8 @@ class TTSEngine:
             engine.runAndWait()
             engine.stop()
 
-            # Explicit cleanup
+
+            
             del engine
 
         except Exception as e:
