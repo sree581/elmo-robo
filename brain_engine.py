@@ -1,56 +1,53 @@
-class BrainEngine:
-    def __init__(self, knowledge_path):
-        self.knowledge = self.load_knowledge(knowledge_path)
+import re
 
-    def load_knowledge(self, path):
-        lines = []
-        try:
-            with open(path, "r") as f:
-                for line in f:
-                    clean = line.strip()
-                    if clean:
-                        lines.append(clean)
-        except FileNotFoundError:
-            print("Knowledge file not found.")
-        return lines
+class BrainEngine:
+    def __init__(self, knowledge_file):
+        self.knowledge = []
+        self.stopwords = {
+            "the", "is", "a", "an", "who", "what", "when",
+            "where", "of", "in", "on", "at", "to", "for",
+            "and", "do", "does", "are", "was"
+        }
+
+        with open(knowledge_file, "r") as f:
+            for line in f:
+                if "|" in line:
+                    question, answer = line.strip().split("|", 1)
+                    self.knowledge.append((question.lower(), answer))
+
+    def clean_text(self, text):
+        text = re.sub(r"[^\w\s]", "", text.lower())
+        words = text.split()
+        words = [w for w in words if w not in self.stopwords]
+        return words
+
+    def score(self, query_words, question):
+        question_words = self.clean_text(question)
+        matches = 0
+
+        for word in query_words:
+            if word in question_words:
+                matches += 1
+
+        return matches
 
     def generate(self, text):
-        text = text.lower().strip()
+        query_words = self.clean_text(text)
 
-        # Built-in intents
-        if "who are you" in text:
-            return "I am Elmo, your offline robotic assistant."
+        if not query_words:
+            return "I didn't understand that."
 
-        if "how are you" in text:
-            return "I am functioning properly and ready to assist you."
-
-        if "what do you do" in text or "what can you do" in text:
-            return "I can answer questions from my knowledge base and assist with robotic commands."
-
-        if "are you offline" in text:
-            return "Yes. I run fully offline."
-
-        if "raspberry pi" in text:
-            return "Raspberry Pi is a small single board computer used for robotics and embedded systems."
-
-        if "shutdown" in text or "stop" in text:
-            return "Shutting down system."
-
-        # Knowledge-based matching
-        best_match = None
         best_score = 0
+        best_answer = None
 
-        for line in self.knowledge:
-            score = 0
-            for word in text.split():
-                if word in line.lower():
-                    score += 1
+        for question, answer in self.knowledge:
+            s = self.score(query_words, question)
 
-            if score > best_score:
-                best_score = score
-                best_match = line
+            if s > best_score:
+                best_score = s
+                best_answer = answer
 
-        if best_match and best_score > 0:
-            return best_match
+        if best_score == 0:
+            return "I do not have that information."
 
-        return "I do not have that information."
+        return best_answer

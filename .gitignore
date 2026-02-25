@@ -9,3 +9,4 @@ __pycache__/
 venv/
 
 vosk-model-en-us-*
+vosk-model-*

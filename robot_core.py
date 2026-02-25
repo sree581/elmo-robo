@@ -1,22 +1,33 @@
 from voice_engine import VoiceEngine
 from brain_engine import BrainEngine
 from tts_engine import TTSEngine
-import difflib
+import re
 
 
 class RobotCore:
     def __init__(self):
-        self.voice = VoiceEngine("vosk-model-en-us-0.22")
+        self.voice = VoiceEngine("vosk-model-small-en-us-0.15")
         self.brain = BrainEngine("knowledge/knowledge.txt")
         self.tts = TTSEngine()
 
-    def wake_detect(self, text):
-        words = text.lower().split()
-        for word in words:
-            similarity = difflib.SequenceMatcher(None, word, "hey").ratio()
-            if similarity > 0.6:
-                return True
-        return False
+        # Wake word
+        self.wake_word = "hello"
+
+    def clean_transcript(self, text):
+        """
+        Clean transcript safely.
+        Removes standalone 'the' only.
+        Does NOT break words like 'weather' or 'whether'.
+        """
+        text = text.lower()
+
+        # Remove standalone 'the'
+        text = re.sub(r"\bthe\b", "", text)
+
+        # Remove extra spaces
+        text = re.sub(r"\s+", " ", text).strip()
+
+        return text
 
     def run(self):
         print("Elmo is now online.")
@@ -26,23 +37,32 @@ class RobotCore:
             while True:
                 print("\nListening...")
                 text = self.voice.listen()
+
+                if not text:
+                    continue
+
                 print("Heard:", text)
 
                 lowered = text.lower()
 
-                direct_triggers = [
-                    "who are you",
-                    "what do you do",
-                    "what can you do",
-                    "raspberry",
-                    "how are you"
-                ]
-
-                if not self.wake_detect(text) and not any(p in lowered for p in direct_triggers):
+                # STRICT wake word detection (as word)
+                words = lowered.split()
+                if self.wake_word not in words:
                     continue
 
-                cleaned_text = lowered.replace("hey", "").strip()
-                response = self.brain.generate(cleaned_text)
+                # Remove wake word
+                command = re.sub(r"\b" + self.wake_word + r"\b", "", lowered).strip()
+
+                # Clean safely
+                command = self.clean_transcript(command)
+
+                if not command:
+                    self.tts.speak("Yes?")
+                    continue
+
+                print("Command:", command)
+
+                response = self.brain.generate(command)
 
                 print("Response:", response)
                 self.tts.speak(response)
