@@ -1,5 +1,0 @@
-The Department of Computer science and Engineering encourages the students and researchers who have a passion for science and engineering by providing adequate computing facilities. The department presently has seven state-of-the- art research laboratories, viz. Computing Lab, OS and Networking Lab, Artificial Intelligence Lab, PG Lab , Image processing Lab , Research Lab and Software Systems Lab.
-
-All the Laboratories are connected to the Institute network (1 Gbps 1:1) on optical fibre/Wi Fi and a Central UPS is made available to the entire department. Students are provided with individual work-spaces and a total of 363 computers and 24 workstations consisting of Intel i7, i5, and i3 processors.
-
-The department regularly upgrades the computing facilities to stay abreast with the latest available technologies technologies
