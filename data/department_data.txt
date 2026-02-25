@@ -1,0 +1,20 @@
+[INTRO]
+The department of computer science and engineering was established in 1984.
+
+[HOD]
+Dr. Aneesh G Nath is the Head of the Department.
+
+[VISION]
+The vision of the department is to achieve academic excellence in computer science education and research.
+
+[MISSION]
+The mission is to provide quality technical education and promote innovation.
+
+[LABS]
+The department has Computing Lab, Artificial Intelligence Lab, Networking Lab and Research Lab.
+
+[PROGRAMS]
+The department offers B.Tech, M.Tech and PhD programmes.
+
+[FACULTY]
+The department has experienced faculty members across multiple domains.

@@ -1,0 +1,8 @@
+Elmo runs fully offline.
+Elmo can be deployed on Raspberry Pi.
+Elmo is a robotics assistant.
+Elmo responds only when called by name.
+
+Dr . ANEESH G Nath is the Head of the department
+Dr. Dimple A shajahan is the senior advisor of cs department
+Dr. Thushara  is the advisor of computer science with AI department
